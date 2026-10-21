@@ -29,9 +29,20 @@ export interface AgendaGroup {
   total: number
 }
 
+/** Hábito registrado en un día en que no estaba programado. */
+export interface ExtraItem {
+  habit: HabitRow
+  goal: GoalRow
+}
+
 export interface DayAgenda {
   date: LocalDate
   groups: AgendaGroup[]
+  /**
+   * Hábitos extra completados ese día. Se muestran, pero no cuentan en el
+   * porcentaje del día ni en la constancia (miden lo que estaba programado).
+   */
+  extras: ExtraItem[]
   completed: number
   total: number
   /** Porcentaje del día (0–100), o null si no hay hábitos programados. */
@@ -75,11 +86,22 @@ export function buildDayAgenda(
     }
   }
 
+  const scheduledIds = new Set(groups.flatMap((g) => g.items.map((i) => i.habit.id)))
+  const goalsById = new Map(ctx.goals.map((g) => [g.id, g]))
+  const extras: ExtraItem[] = ctx.habits
+    .filter((h) => !scheduledIds.has(h.id) && completions.has(completionKey(h.id, date)))
+    .sort(byTimeThenName)
+    .flatMap((habit) => {
+      const goal = goalsById.get(habit.goal_id)
+      return goal ? [{ habit, goal }] : []
+    })
+
   const total = groups.reduce((n, g) => n + g.total, 0)
   const completed = groups.reduce((n, g) => n + g.completed, 0)
   return {
     date,
     groups,
+    extras,
     total,
     completed,
     percent: total === 0 ? null : (completed / total) * 100,
@@ -123,4 +145,30 @@ export function periodConsistency(
   today: LocalDate,
 ): Consistency {
   return consistency(ctx.stats, completions, from, to, today)
+}
+
+/**
+ * Hábitos que se pueden registrar como extra en una fecha: activos, de metas
+ * activas, que ya habían empezado, que no estaban programados ese día y que
+ * aún no se registraron. Nunca en fechas futuras.
+ */
+export function extraCandidates(
+  ctx: AgendaContext,
+  date: LocalDate,
+  completions: ReadonlySet<string>,
+  today: LocalDate,
+): ExtraItem[] {
+  if (date > today) return []
+  const statsById = new Map(ctx.stats.map((s) => [s.id, s]))
+  const goalsById = new Map(ctx.goals.map((g) => [g.id, g]))
+  return ctx.habits
+    .filter((h) => h.status === 'active' && date >= h.start_date)
+    .filter((h) => goalsById.get(h.goal_id)?.status === 'active')
+    .filter((h) => {
+      const stat = statsById.get(h.id)
+      return !stat || !isScheduledOn(stat.schedule, date)
+    })
+    .filter((h) => !completions.has(completionKey(h.id, date)))
+    .sort(byTimeThenName)
+    .map((habit) => ({ habit, goal: goalsById.get(habit.goal_id)! }))
 }

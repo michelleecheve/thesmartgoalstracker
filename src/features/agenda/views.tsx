@@ -5,6 +5,7 @@ import { ProgressRing } from '@/components/common/ProgressRing'
 import {
   buildDayAgenda,
   dayIndicator,
+  extraCandidates,
   periodConsistency,
   type AgendaContext,
   type DayIndicator,
@@ -79,7 +80,11 @@ function SelectedDay({ ctx, selected, today, completions, onToggle, showSummary 
           </span>
         )}
       </div>
-      <DayAgendaList agenda={agenda} onToggle={(habitId, completed) => onToggle(habitId, selected, completed)} />
+      <DayAgendaList
+        agenda={agenda}
+        extraCandidates={extraCandidates(ctx, selected, completions, today)}
+        onToggle={(habitId, completed) => onToggle(habitId, selected, completed)}
+      />
     </div>
   )
 }

@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils'
 
 export interface ActionSheetItem {
   label: string
+  /** Texto secundario bajo la etiqueta (opcional). */
+  detail?: string
   icon?: LucideIcon
   onSelect: () => void
   destructive?: boolean
@@ -39,9 +41,9 @@ export function ActionSheet({ open, onOpenChange, title, description, items }: A
                 <DialogPrimitive.Description className="sr-only">Elige una acción</DialogPrimitive.Description>
               )}
             </div>
-            <ul className="border-t border-border">
-              {items.map(({ label, icon: Icon, onSelect, destructive }) => (
-                <li key={label} className="border-b border-border last:border-b-0">
+            <ul className="max-h-[55dvh] overflow-y-auto border-t border-border">
+              {items.map(({ label, detail, icon: Icon, onSelect, destructive }, index) => (
+                <li key={`${index}-${label}`} className="border-b border-border last:border-b-0">
                   <button
                     type="button"
                     onClick={() => {
@@ -54,7 +56,10 @@ export function ActionSheet({ open, onOpenChange, title, description, items }: A
                     )}
                   >
                     {Icon && <Icon className="size-5 shrink-0 opacity-80" />}
-                    {label}
+                    <span className="min-w-0 py-2">
+                      <span className="block truncate">{label}</span>
+                      {detail && <span className="block truncate text-xs text-muted-foreground">{detail}</span>}
+                    </span>
                   </button>
                 </li>
               ))}

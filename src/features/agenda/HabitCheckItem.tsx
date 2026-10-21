@@ -7,6 +7,8 @@ interface HabitCheckItemProps {
   item: AgendaItem
   goalColor: string | null
   onToggle: (completed: boolean) => void
+  /** Texto adicional (p. ej. la meta, en los hábitos extra). */
+  subtitle?: string
 }
 
 const statusText = {
@@ -14,7 +16,7 @@ const statusText = {
   programado: 'Programado',
 } as const
 
-export function HabitCheckItem({ item, goalColor, onToggle }: HabitCheckItemProps) {
+export function HabitCheckItem({ item, goalColor, onToggle, subtitle }: HabitCheckItemProps) {
   const { habit, completed, status } = item
   const future = status === 'programado'
   const color = accentVar(habit.color ?? goalColor)
@@ -64,8 +66,9 @@ export function HabitCheckItem({ item, goalColor, onToggle }: HabitCheckItemProp
         >
           {habit.name}
         </span>
-        {(details.length > 0 || status === 'no_completado' || future) && (
+        {(details.length > 0 || status === 'no_completado' || future || subtitle) && (
           <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
+            {subtitle && <span className="truncate">{subtitle}</span>}
             {details.length > 0 && (
               <span className="inline-flex items-center gap-1">
                 <Clock className="size-3" />

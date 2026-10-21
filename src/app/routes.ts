@@ -12,6 +12,7 @@ export const routes = {
   meta: (id: string) => `/metas/${id}`,
   editarMeta: (id: string) => `/metas/${id}/editar`,
   nuevoHabito: (metaId: string) => `/metas/${metaId}/habitos/nuevo`,
+  habito: (habitoId: string) => `/habitos/${habitoId}`,
   editarHabito: (habitoId: string) => `/habitos/${habitoId}/editar`,
   estadisticas: '/estadisticas',
   vision: '/vision',

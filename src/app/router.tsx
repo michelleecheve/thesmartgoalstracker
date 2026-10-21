@@ -73,6 +73,7 @@ export const router = createBrowserRouter([
               page(routes.inicio, () => import('@/pages/inicio/InicioPage'), 'InicioPage'),
               page(routes.metas, () => import('@/pages/metas/MisMetasPage'), 'MisMetasPage'),
               page('/metas/:metaId', () => import('@/pages/metas/MetaDetallePage'), 'MetaDetallePage'),
+              page('/habitos/:habitoId', () => import('@/pages/metas/HabitoDetallePage'), 'HabitoDetallePage'),
               page(routes.estadisticas, () => import('@/pages/estadisticas/EstadisticasPage'), 'EstadisticasPage'),
               page(routes.vision, () => import('@/pages/vision/TableroVisionPage'), 'TableroVisionPage'),
               page(routes.perfil, () => import('@/pages/perfil/PerfilPage'), 'PerfilPage'),
