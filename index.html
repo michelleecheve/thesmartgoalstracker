@@ -15,6 +15,20 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
 
     <title>Metas SMART</title>
+
+    <!-- Aplica el tema guardado antes de dibujar la página (evita un destello). Ver src/lib/theme.ts -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('tema')
+          var dark = t === 'oscuro' || (t === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) {
+            document.documentElement.classList.add('dark')
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1c1a17')
+          }
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

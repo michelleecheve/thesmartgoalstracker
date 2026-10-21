@@ -21,6 +21,8 @@ import {
 } from '@/components/ui/dialog'
 import { FormField } from '@/components/forms/FormField'
 import { SectionTitle } from '@/components/common/SectionTitle'
+import { SegmentedControl } from '@/components/ui/segmented-control'
+import { useTheme } from '@/lib/theme'
 import { useAuth, useCurrentUser } from '@/app/auth/auth-context'
 import { signOut } from '@/services/auth'
 import { updateDisplayName } from '@/services/profile'
@@ -39,6 +41,7 @@ export function PerfilPage() {
   const user = useCurrentUser()
   const { profile, setProfile } = useAuth()
   const [signingOut, setSigningOut] = useState(false)
+  const theme = useTheme()
 
   const {
     register,
@@ -101,6 +104,29 @@ export function PerfilPage() {
                   Guardar nombre
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <SectionTitle>Apariencia</SectionTitle>
+          <Card>
+            <CardContent className="flex flex-col gap-3">
+              <SegmentedControl
+                label="Tema"
+                value={theme.preference}
+                onChange={theme.setPreference}
+                options={[
+                  { value: 'claro', label: 'Claro' },
+                  { value: 'oscuro', label: 'Oscuro' },
+                  { value: 'sistema', label: 'Sistema' },
+                ]}
+              />
+              <p className="text-sm text-muted-foreground">
+                {theme.preference === 'sistema'
+                  ? `Sigue la configuración de tu dispositivo (ahora: ${theme.resolved === 'oscuro' ? 'oscuro' : 'claro'}).`
+                  : 'Se guarda en este dispositivo.'}
+              </p>
             </CardContent>
           </Card>
         </section>

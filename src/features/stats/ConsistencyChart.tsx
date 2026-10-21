@@ -5,14 +5,19 @@ import { Button } from '@/components/ui/button'
 import type { Granularity, SeriesPoint } from '@/domain/stats'
 import { formatPercent } from '@/domain/progress'
 import { capitalize, formatEs } from '@/lib/dates'
+import { useTheme } from '@/lib/theme'
 
-/** Lee un token de color del sistema de diseño (los atributos SVG no siempre aceptan var()). */
+/**
+ * Lee un token de color del sistema de diseño (los atributos SVG no siempre aceptan var()).
+ * Se vuelve a leer al cambiar entre modo claro y oscuro.
+ */
 function useCssVar(name: string, fallback: string): string {
+  const { resolved } = useTheme()
   const [value, setValue] = useState(fallback)
   useEffect(() => {
     const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
     if (v) setValue(v)
-  }, [name])
+  }, [name, resolved])
   return value
 }
 

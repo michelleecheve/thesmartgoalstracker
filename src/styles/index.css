@@ -10,6 +10,7 @@
    Todos los colores son tokens: el modo oscuro solo redefine estos valores.
    ------------------------------------------------------------------ */
 :root {
+  color-scheme: light;
   --radius: 1rem;
 
   --background: #faf7f2;
@@ -31,10 +32,12 @@
 
   --success: #6f8f72;
   --success-soft: #e9efe6;
+  --success-foreground: #ffffff;
   --warning: #c8913f;
   --warning-soft: #f8eedd;
   --destructive: #c0564a;
   --destructive-soft: #f7e4e1;
+  --destructive-foreground: #ffffff;
 
   --border: #ebe5db;
   --input: #e3dcd0;
@@ -71,7 +74,9 @@
   --bottom-nav-height: 64px;
 }
 
+/* Modo oscuro: mismos tokens, otros valores. Contrastes verificados sobre #262320 (tarjetas). */
 .dark {
+  color-scheme: dark;
   --background: #1c1a17;
   --foreground: #ece7df;
   --card: #262320;
@@ -86,9 +91,16 @@
   --muted-foreground: #a39a8e;
   --accent: #2c352c;
   --accent-foreground: #c9dcc9;
+  --success: #8fbf93;
   --success-soft: #2c352c;
+  --success-foreground: #1c1a17;
+  --warning: #e0ad5c;
   --warning-soft: #3a3020;
+  --destructive: #e8806f;
   --destructive-soft: #3d2522;
+  --destructive-foreground: #1c1a17;
+  --chart-line: #4fa06e;
+  --chart-grid: #36322d;
   --border: #36322d;
   --input: #3d3833;
   --ring: #6f8f72;
@@ -116,10 +128,12 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
+  --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
   --color-destructive: var(--destructive);
   --color-destructive-soft: var(--destructive-soft);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

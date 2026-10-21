@@ -178,4 +178,5 @@ Cubren: programación recurrente y versiones históricas (incluido el cambio lun
 ## Diseño
 
 - Formato de app móvil: ancho completo en iPhone, centrado a 428px en computadora; áreas seguras de iOS; `100dvh`; elementos táctiles de al menos 44×44px.
-- Paleta cálida (fondo crema, texto gris oscuro, acento salvia) definida como variables en `src/styles/index.css`. El **modo oscuro** está preparado: basta con agregar la clase `dark` a `<html>` (falta un selector en Configuración).
+- Paleta cálida (fondo crema, texto gris oscuro, acento salvia) definida como variables en `src/styles/index.css`.
+- **Modo oscuro:** en **Perfil → Apariencia** se elige Claro, Oscuro o Sistema (sigue al dispositivo en vivo). La preferencia se guarda en cada dispositivo y se aplica antes de dibujar la página, sin destellos. Los colores oscuros tienen contraste verificado.

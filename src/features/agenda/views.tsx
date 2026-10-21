@@ -231,7 +231,7 @@ export function WeekView(props: AgendaViewProps) {
 
 function monthCellClass(indicator: DayIndicator): string {
   if (indicator.kind !== 'progress') return ''
-  if (indicator.ratio >= 1) return 'bg-success text-white'
+  if (indicator.ratio >= 1) return 'bg-success text-success-foreground'
   if (indicator.ratio > 0) return 'bg-success-soft text-accent-foreground'
   return indicator.isToday ? '' : 'bg-destructive-soft/70'
 }
