@@ -6,62 +6,78 @@
 
 /* ------------------------------------------------------------------
    Sistema de diseño
-   Paleta cálida y suave: fondo crema, texto gris oscuro, acento salvia.
+   Paleta: azul eléctrico (principal), azul noche (contraste),
+   naranja coral y amarillo cálido (acentos) sobre superficies azuladas claras.
    Todos los colores son tokens: el modo oscuro solo redefine estos valores.
    ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
   --radius: 1rem;
 
-  --background: #faf7f2;
-  --foreground: #3f3a34;
+  /* Paleta de marca */
+  --brand-blue: #5670ff;
+  --brand-coral: #ff8750;
+  --brand-yellow: #ffbe5f;
+  --brand-night: #0e0f2a;
+
+  --background: #f5f7ff;
+  --foreground: var(--brand-night);
 
   --card: #ffffff;
-  --card-foreground: #3f3a34;
+  --card-foreground: var(--brand-night);
   --popover: #ffffff;
-  --popover-foreground: #3f3a34;
+  --popover-foreground: var(--brand-night);
 
-  --primary: #557558;
+  --primary: var(--brand-blue);
   --primary-foreground: #ffffff;
-  --secondary: #f1ece4;
-  --secondary-foreground: #3f3a34;
-  --muted: #f1ece4;
-  --muted-foreground: #857d72;
-  --accent: #e9efe6;
-  --accent-foreground: #3d5a41;
+  --secondary: #eef1ff;
+  --secondary-foreground: var(--brand-night);
+  --muted: #eef1ff;
+  --muted-foreground: #646a80;
+  --accent: #e6eaff;
+  --accent-foreground: #3346d6;
 
-  --success: #6f8f72;
-  --success-soft: #e9efe6;
+  --success: var(--brand-blue);
+  --success-soft: #dde3ff;
   --success-foreground: #ffffff;
-  --warning: #c8913f;
-  --warning-soft: #f8eedd;
-  --destructive: #c0564a;
-  --destructive-soft: #f7e4e1;
+  --warning: #c2511f;
+  --warning-soft: #fff0e8;
+  --destructive: #d93a3f;
+  --destructive-soft: #fde6e7;
   --destructive-foreground: #ffffff;
+  /* Logros (meta del día cumplida) */
+  --achievement: var(--brand-yellow);
 
-  --border: #ebe5db;
-  --input: #e3dcd0;
-  --ring: #8fae92;
+  --border: #e3e6f0;
+  --input: #d9ddeb;
+  --ring: var(--brand-blue);
 
-  /* Colores identificadores para metas (suaves, no saturados) */
-  --goal-sage: #8fae92;
-  --goal-terracotta: #d39a7e;
-  --goal-sky: #8fb3cf;
-  --goal-lavender: #ab9ccb;
-  --goal-sand: #d6b77f;
-  --goal-rose: #d49aa8;
-  --goal-slate: #8e98a3;
+  /* Tarjeta destacada (progreso de hoy): azul noche con texto claro */
+  --hero: var(--brand-night);
+  --hero-foreground: #ffffff;
+  --hero-muted: #a9aedb;
+  --hero-track: #262a52;
+  --hero-border: transparent;
 
-  --chart-1: #6f8f72;
-  --chart-2: #d39a7e;
-  --chart-3: #8fb3cf;
-  --chart-4: #ab9ccb;
-  --chart-5: #d6b77f;
-  /* Línea de constancia: validada (luminosidad, saturación y contraste) contra la superficie clara. */
-  --chart-line: #3f8a5a;
-  --chart-grid: #eeeae3;
+  /* Colores identificadores para metas (las claves se guardan en la base de datos) */
+  --goal-sage: var(--brand-blue);
+  --goal-terracotta: var(--brand-coral);
+  --goal-sky: #22b8d6;
+  --goal-lavender: #9b7bff;
+  --goal-sand: var(--brand-yellow);
+  --goal-rose: #ff6b9a;
+  --goal-slate: #3d4270;
 
-  --shadow-color: 40 30% 30%;
+  --chart-1: var(--brand-blue);
+  --chart-2: var(--brand-coral);
+  --chart-3: var(--brand-yellow);
+  --chart-4: #9b7bff;
+  --chart-5: #22b8d6;
+  /* Línea de constancia: azul eléctrico sobre la superficie clara. */
+  --chart-line: var(--brand-blue);
+  --chart-grid: #e8ebf5;
+
+  --shadow-color: 234 50% 18%;
 
   /* Áreas seguras de iOS */
   --safe-top: env(safe-area-inset-top, 0px);
@@ -74,37 +90,53 @@
   --bottom-nav-height: 64px;
 }
 
-/* Modo oscuro: mismos tokens, otros valores. Contrastes verificados sobre #262320 (tarjetas). */
+/* Modo oscuro: mismos tokens, otros valores. Contrastes verificados sobre #181a3d (tarjetas). */
 .dark {
   color-scheme: dark;
-  --background: #1c1a17;
-  --foreground: #ece7df;
-  --card: #262320;
-  --card-foreground: #ece7df;
-  --popover: #262320;
-  --popover-foreground: #ece7df;
-  --primary: #8fae92;
-  --primary-foreground: #1c1a17;
-  --secondary: #2f2b27;
-  --secondary-foreground: #ece7df;
-  --muted: #2f2b27;
-  --muted-foreground: #a39a8e;
-  --accent: #2c352c;
-  --accent-foreground: #c9dcc9;
-  --success: #8fbf93;
-  --success-soft: #2c352c;
-  --success-foreground: #1c1a17;
-  --warning: #e0ad5c;
-  --warning-soft: #3a3020;
-  --destructive: #e8806f;
-  --destructive-soft: #3d2522;
-  --destructive-foreground: #1c1a17;
-  --chart-line: #4fa06e;
-  --chart-grid: #36322d;
-  --border: #36322d;
-  --input: #3d3833;
-  --ring: #6f8f72;
-  --shadow-color: 0 0% 0%;
+  --background: var(--brand-night);
+  --foreground: #eef0ff;
+  --card: #181a3d;
+  --card-foreground: #eef0ff;
+  --popover: #181a3d;
+  --popover-foreground: #eef0ff;
+  --primary: #7b8fff;
+  --primary-foreground: var(--brand-night);
+  --secondary: #22254d;
+  --secondary-foreground: #eef0ff;
+  --muted: #22254d;
+  --muted-foreground: #9aa0c8;
+  --accent: #262a5e;
+  --accent-foreground: #b9c4ff;
+  --success: #7b8fff;
+  --success-soft: #2b3170;
+  --success-foreground: var(--brand-night);
+  --warning: #ffa36f;
+  --warning-soft: #3a2a2a;
+  --destructive: #ff7a7a;
+  --destructive-soft: #3d1f2b;
+  --destructive-foreground: var(--brand-night);
+  --hero: #232870;
+  --hero-foreground: #ffffff;
+  --hero-muted: #c3c8f0;
+  --hero-track: #363c8a;
+  --hero-border: #363c8a;
+  --goal-slate: #8a90b8;
+  --chart-line: #7b8fff;
+  --chart-grid: #2a2d5a;
+  --border: #2a2d5a;
+  --input: #33376a;
+  --ring: #7b8fff;
+  --shadow-color: 240 60% 3%;
+}
+
+/* Superficie destacada: redefine los tokens de su contenido (solo color). */
+.surface-hero {
+  --card: var(--hero);
+  --card-foreground: var(--hero-foreground);
+  --foreground: var(--hero-foreground);
+  --muted: var(--hero-track);
+  --muted-foreground: var(--hero-muted);
+  --border: var(--hero-border);
 }
 
 @theme inline {
@@ -134,6 +166,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-soft: var(--destructive-soft);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-achievement: var(--achievement);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

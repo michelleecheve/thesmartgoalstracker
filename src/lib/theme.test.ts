@@ -8,7 +8,7 @@ const mediaListeners = new Set<() => void>()
 beforeEach(() => {
   localStorage.clear()
   document.documentElement.classList.remove('dark')
-  document.head.innerHTML = '<meta name="theme-color" content="#faf7f2" />'
+  document.head.innerHTML = '<meta name="theme-color" content="#f5f7ff" />'
   systemDark = false
   mediaListeners.clear()
   vi.stubGlobal('matchMedia', (query: string) => ({
@@ -34,10 +34,10 @@ describe('tema de la interfaz', () => {
     setThemePreference('oscuro')
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('oscuro')
     expect(document.documentElement).toHaveClass('dark')
-    expect(themeColor()).toBe('#1c1a17')
+    expect(themeColor()).toBe('#0e0f2a')
     setThemePreference('claro')
     expect(document.documentElement).not.toHaveClass('dark')
-    expect(themeColor()).toBe('#faf7f2')
+    expect(themeColor()).toBe('#f5f7ff')
   })
 
   it('"Sistema" sigue la preferencia del dispositivo', () => {

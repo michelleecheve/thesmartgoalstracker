@@ -159,13 +159,13 @@ function TodayCard({
 }) {
   const done = percent !== null && percent >= 100
   return (
-    <Card>
+    <Card className="surface-hero">
       <CardContent className="flex items-center gap-4">
         <ProgressRing
           value={percent ?? 0}
           size={64}
           strokeWidth={7}
-          color={done ? 'var(--success)' : 'var(--primary)'}
+          color={done ? 'var(--achievement)' : 'var(--primary)'}
           label="Progreso de hoy"
         >
           <span className="text-sm font-semibold tabular-nums">{loading || percent === null ? '—' : `${Math.round(percent)}%`}</span>

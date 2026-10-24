@@ -11,7 +11,7 @@ export type ResolvedTheme = 'claro' | 'oscuro'
 
 export const THEME_STORAGE_KEY = 'tema'
 const CHANGE_EVENT = 'temachange'
-const BACKGROUND: Record<ResolvedTheme, string> = { claro: '#faf7f2', oscuro: '#1c1a17' }
+const BACKGROUND: Record<ResolvedTheme, string> = { claro: '#f5f7ff', oscuro: '#0e0f2a' }
 
 function systemPrefersDark(): boolean {
   return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
