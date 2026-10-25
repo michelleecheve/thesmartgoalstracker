@@ -117,7 +117,7 @@ export function DayView(props: AgendaViewProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-border/60 bg-card px-2 pt-1 pb-2 shadow-soft">
+      <div className="rounded-2xl border border-card-border bg-card px-2 pt-1 pb-2 shadow-soft">
         <NavHeader
           label={capitalize(formatEs(selected, 'MMMM yyyy'))}
           onPrev={() => onSelect(addDaysLocal(selected, -7))}
@@ -193,7 +193,7 @@ export function WeekView(props: AgendaViewProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-border/60 bg-card px-2 pt-1 pb-3 shadow-soft">
+      <div className="rounded-2xl border border-card-border bg-card px-2 pt-1 pb-3 shadow-soft">
         <NavHeader
           label={label.replace(/\./g, '')}
           onPrev={() => onSelect(addDaysLocal(selected, -7))}
@@ -255,7 +255,7 @@ export function MonthView(props: AgendaViewProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-border/60 bg-card px-2 pt-1 pb-3 shadow-soft">
+      <div className="rounded-2xl border border-card-border bg-card px-2 pt-1 pb-3 shadow-soft">
         <NavHeader
           label={capitalize(formatEs(selected, 'MMMM yyyy'))}
           onPrev={() => changeMonth(-1)}

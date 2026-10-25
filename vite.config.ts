@@ -15,7 +15,7 @@ export default defineConfig({
       VitePWA({
         registerType: 'autoUpdate',
         injectRegister: 'auto',
-        includeAssets: ['icon.svg', 'icons/apple-touch-icon.png'],
+        includeAssets: ['icons/icon-192.png', 'icons/apple-touch-icon.png'],
         manifest: {
           name: 'Metas SMART',
           short_name: 'Metas',
@@ -26,8 +26,8 @@ export default defineConfig({
           scope: '/',
           display: 'standalone',
           orientation: 'portrait',
-          background_color: '#f5f7ff',
-          theme_color: '#f5f7ff',
+          background_color: '#f7f7f9',
+          theme_color: '#f7f7f9',
           icons: [
             { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
             { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },

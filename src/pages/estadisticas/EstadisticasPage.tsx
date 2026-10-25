@@ -238,7 +238,7 @@ export function EstadisticasPage() {
                 <ul className="flex flex-col gap-2">
                   {data.goalRows.map(({ goal, metric, consistency: c }) => (
                     <li key={goal.id}>
-                      <Link to={routes.meta(goal.id)} className="block rounded-2xl border border-border/60 bg-card p-4 shadow-soft transition-shadow hover:shadow-lifted">
+                      <Link to={routes.meta(goal.id)} className="block rounded-2xl border border-card-border bg-card p-4 shadow-soft transition-shadow hover:shadow-lifted">
                         <div className="flex items-center gap-2">
                           <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: accentVar(goal.color) }} />
                           <p className="truncate font-medium">{goal.name}</p>

@@ -43,7 +43,7 @@ export function DayAgendaList({ agenda, extraCandidates, onToggle }: DayAgendaLi
       {agenda.groups.map((group) => {
         const color = accentVar(group.goal.color)
         return (
-          <section key={group.goal.id} className="rounded-2xl border border-border/60 bg-card p-2 shadow-soft">
+          <section key={group.goal.id} className="rounded-2xl border border-card-border bg-card p-2 shadow-soft">
             <div className="px-2 pt-2 pb-1">
               <Link to={routes.meta(group.goal.id)} className="group flex min-h-9 items-center gap-2 text-sm font-semibold">
                 <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
@@ -96,7 +96,7 @@ export function DayAgendaList({ agenda, extraCandidates, onToggle }: DayAgendaLi
       )}
 
       {extraCandidates.length > 0 && (
-        <Button variant="ghost" className="self-center text-muted-foreground" onClick={() => setPickerOpen(true)}>
+        <Button variant="ghost" className="self-center text-primary dark:text-muted-foreground" onClick={() => setPickerOpen(true)}>
           <Plus className="size-4" /> Registrar un hábito extra
         </Button>
       )}

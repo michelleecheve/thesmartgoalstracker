@@ -20,7 +20,7 @@ export function GoalCard({ summary, today }: { summary: GoalSummary; today: Loca
   return (
     <Link
       to={routes.meta(goal.id)}
-      className="group block rounded-2xl border border-border/60 bg-card p-4 shadow-soft transition-all duration-200 hover:shadow-lifted active:scale-[0.99]"
+      className="group block rounded-2xl border border-card-border bg-card p-4 shadow-soft transition-all duration-200 hover:shadow-lifted active:scale-[0.99]"
     >
       <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
         <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />

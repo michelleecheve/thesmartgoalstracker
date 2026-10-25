@@ -6,8 +6,9 @@
 
 /* ------------------------------------------------------------------
    Sistema de diseño
-   Paleta: azul eléctrico (principal), azul noche (contraste),
-   naranja coral y amarillo cálido (acentos) sobre superficies azuladas claras.
+   Paleta: superficies blancas y grises neutros, azul eléctrico (acciones),
+   amarillo cálido (selección y destacados), coral (acentos) y azul noche
+   solo en textos y detalles pequeños.
    Todos los colores son tokens: el modo oscuro solo redefine estos valores.
    ------------------------------------------------------------------ */
 :root {
@@ -20,7 +21,7 @@
   --brand-yellow: #ffbe5f;
   --brand-night: #0e0f2a;
 
-  --background: #f5f7ff;
+  --background: #f7f7f9;
   --foreground: var(--brand-night);
 
   --card: #ffffff;
@@ -30,34 +31,41 @@
 
   --primary: var(--brand-blue);
   --primary-foreground: #ffffff;
-  --secondary: #eef1ff;
+  --secondary: #f1f2f5;
   --secondary-foreground: var(--brand-night);
-  --muted: #eef1ff;
-  --muted-foreground: #646a80;
-  --accent: #e6eaff;
-  --accent-foreground: #3346d6;
+  --muted: #f1f2f5;
+  --muted-foreground: #686d7c;
+  --accent: #fff3dc;
+  --accent-foreground: var(--brand-night);
+  /* Opción seleccionada en pestañas y selectores */
+  --highlight: var(--brand-yellow);
+  --highlight-foreground: var(--brand-night);
 
   --success: var(--brand-blue);
   --success-soft: #dde3ff;
   --success-foreground: #ffffff;
   --warning: #c2511f;
-  --warning-soft: #fff0e8;
+  --warning-soft: #fff3dc;
   --destructive: #d93a3f;
   --destructive-soft: #fde6e7;
   --destructive-foreground: #ffffff;
   /* Logros (meta del día cumplida) */
   --achievement: var(--brand-yellow);
 
-  --border: #e3e6f0;
-  --input: #d9ddeb;
+  --border: #e6e7ec;
+  --input: #dcdee5;
+  /* Orilla de tarjetas y recuadros */
+  --card-border: color-mix(in srgb, var(--border) 60%, transparent);
   --ring: var(--brand-blue);
 
-  /* Tarjeta destacada (progreso de hoy): azul noche con texto claro */
-  --hero: var(--brand-night);
-  --hero-foreground: #ffffff;
-  --hero-muted: #a9aedb;
-  --hero-track: #262a52;
+  /* Tarjeta destacada (progreso de hoy): amarillo con texto y anillo azul noche */
+  --hero: var(--brand-yellow);
+  --hero-foreground: var(--brand-night);
+  --hero-muted: #5c4520;
+  --hero-track: #ffe2b0;
   --hero-border: transparent;
+  --hero-primary: var(--brand-night);
+  --hero-achievement: var(--brand-blue);
 
   /* Colores identificadores para metas (las claves se guardan en la base de datos) */
   --goal-sage: var(--brand-blue);
@@ -75,9 +83,9 @@
   --chart-5: #22b8d6;
   /* Línea de constancia: azul eléctrico sobre la superficie clara. */
   --chart-line: var(--brand-blue);
-  --chart-grid: #e8ebf5;
+  --chart-grid: #ecedf1;
 
-  --shadow-color: 234 50% 18%;
+  --shadow-color: 230 15% 25%;
 
   /* Áreas seguras de iOS */
   --safe-top: env(safe-area-inset-top, 0px);
@@ -90,43 +98,49 @@
   --bottom-nav-height: 64px;
 }
 
-/* Modo oscuro: mismos tokens, otros valores. Contrastes verificados sobre #181a3d (tarjetas). */
+/* Modo oscuro: fondos cálidos originales con los acentos de la marca.
+   Contrastes verificados sobre #262320 (tarjetas). */
 .dark {
   color-scheme: dark;
-  --background: var(--brand-night);
-  --foreground: #eef0ff;
-  --card: #181a3d;
-  --card-foreground: #eef0ff;
-  --popover: #181a3d;
-  --popover-foreground: #eef0ff;
+  --background: #1c1a17;
+  --foreground: #ece7df;
+  --card: #262320;
+  --card-foreground: #ece7df;
+  --popover: #262320;
+  --popover-foreground: #ece7df;
   --primary: #7b8fff;
-  --primary-foreground: var(--brand-night);
-  --secondary: #22254d;
-  --secondary-foreground: #eef0ff;
-  --muted: #22254d;
-  --muted-foreground: #9aa0c8;
-  --accent: #262a5e;
-  --accent-foreground: #b9c4ff;
+  --primary-foreground: #1c1a17;
+  --secondary: #2f2b27;
+  --secondary-foreground: #ece7df;
+  --muted: #2f2b27;
+  --muted-foreground: #a39a8e;
+  --accent: #3a3020;
+  --accent-foreground: #ffd08a;
+  --highlight: var(--brand-yellow);
+  --highlight-foreground: #1c1a17;
   --success: #7b8fff;
-  --success-soft: #2b3170;
-  --success-foreground: var(--brand-night);
+  --success-soft: #2e3150;
+  --success-foreground: #1c1a17;
   --warning: #ffa36f;
-  --warning-soft: #3a2a2a;
-  --destructive: #ff7a7a;
-  --destructive-soft: #3d1f2b;
-  --destructive-foreground: var(--brand-night);
-  --hero: #232870;
-  --hero-foreground: #ffffff;
-  --hero-muted: #c3c8f0;
-  --hero-track: #363c8a;
-  --hero-border: #363c8a;
-  --goal-slate: #8a90b8;
+  --warning-soft: #3a2b22;
+  --destructive: #e8806f;
+  --destructive-soft: #3d2522;
+  --destructive-foreground: #1c1a17;
+  --hero: #262320;
+  --hero-foreground: #ece7df;
+  --hero-muted: #a39a8e;
+  --hero-track: #2f2b27;
+  --hero-border: transparent;
+  --hero-primary: var(--brand-yellow);
+  --hero-achievement: var(--brand-yellow);
+  --goal-slate: #a39a8e;
   --chart-line: #7b8fff;
-  --chart-grid: #2a2d5a;
-  --border: #2a2d5a;
-  --input: #33376a;
+  --chart-grid: #36322d;
+  --border: #36322d;
+  --input: #3d3833;
+  --card-border: transparent;
   --ring: #7b8fff;
-  --shadow-color: 240 60% 3%;
+  --shadow-color: 0 0% 0%;
 }
 
 /* Superficie destacada: redefine los tokens de su contenido (solo color). */
@@ -137,6 +151,9 @@
   --muted: var(--hero-track);
   --muted-foreground: var(--hero-muted);
   --border: var(--hero-border);
+  --card-border: var(--hero-border);
+  --primary: var(--hero-primary);
+  --achievement: var(--hero-achievement);
 }
 
 @theme inline {
@@ -167,7 +184,10 @@
   --color-destructive-soft: var(--destructive-soft);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-achievement: var(--achievement);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-border: var(--border);
+  --color-card-border: var(--card-border);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
@@ -254,6 +274,21 @@
     min-width: 0;
     -webkit-appearance: none;
     appearance: none;
+  }
+  /* El autocompletado del navegador pinta los campos de celeste o amarillo.
+     Una sombra interior del color de la tarjeta lo cubre; se usa la variable
+     de sombra interior de Tailwind para no perder el anillo de foco. */
+  input:autofill,
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    --tw-inset-shadow: inset 0 0 0 1000px var(--card);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow, 0 0 #0000), var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow, 0 0 #0000);
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+    transition: background-color 600000s 0s;
   }
   input::-webkit-date-and-time-value {
     text-align: left;

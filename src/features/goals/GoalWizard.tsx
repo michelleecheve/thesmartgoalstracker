@@ -356,7 +356,7 @@ function Review({ values, onEdit }: { values: GoalFormValues; onEdit: (key: Step
   return (
     <>
       <StepIntro title="Revisa tu meta" subtitle="Puedes corregir cualquier parte antes de guardar." />
-      <div className="rounded-2xl border border-border/60 bg-card p-5 shadow-soft">
+      <div className="rounded-2xl border border-card-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span className="size-2.5 rounded-full" style={{ backgroundColor: accentVar(values.color) }} />
           {category.label}
@@ -369,7 +369,7 @@ function Review({ values, onEdit }: { values: GoalFormValues; onEdit: (key: Step
       </div>
       <ul className="flex flex-col gap-2">
         {rows.map((row) => (
-          <li key={row.key} className="flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-4">
+          <li key={row.key} className="flex items-start gap-3 rounded-2xl border border-card-border bg-card p-4">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-foreground">
               {smartGuide[row.key as SmartKey].letter}
             </span>

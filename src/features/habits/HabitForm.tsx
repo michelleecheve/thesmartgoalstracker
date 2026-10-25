@@ -102,7 +102,7 @@ export function HabitForm({ mode, title, intro, goals, initialValues, onSubmit, 
           </NativeSelect>
         </FormField>
 
-        <section className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+        <section className="flex flex-col gap-3 rounded-2xl border border-card-border bg-card p-4 shadow-soft">
           <Label>¿Cada cuánto?</Label>
           <Controller
             control={control}

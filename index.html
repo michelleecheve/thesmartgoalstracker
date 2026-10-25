@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f5f7ff" />
+    <meta name="theme-color" content="#f7f7f9" />
     <meta name="description" content="Convierte tus metas SMART en hábitos pequeños, medibles y constantes." />
 
     <!-- Aplicación instalable en iPhone (Safari → Compartir → Agregar a inicio) -->
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Metas" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
 
     <title>Metas SMART</title>
 
@@ -24,7 +24,7 @@
           var dark = t === 'oscuro' || (t === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (dark) {
             document.documentElement.classList.add('dark')
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0e0f2a')
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1c1a17')
           }
         } catch (e) {}
       })()

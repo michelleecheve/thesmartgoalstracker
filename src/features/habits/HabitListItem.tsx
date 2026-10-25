@@ -33,7 +33,7 @@ export function HabitListItem({ habit, version, consistency, today, onOpenAction
   return (
     <div
       className={cn(
-        'flex items-start rounded-2xl border border-border/60 bg-card transition-shadow hover:shadow-soft',
+        'flex items-start rounded-2xl border border-card-border bg-card transition-shadow hover:shadow-soft',
         habit.status !== 'active' && 'opacity-75',
       )}
     >

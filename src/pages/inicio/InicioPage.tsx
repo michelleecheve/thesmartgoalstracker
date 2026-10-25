@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { CalendarCheck, ListChecks, UserRound } from 'lucide-react'
+import { CalendarCheck, ListChecks, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -75,9 +75,9 @@ export function InicioPage() {
             {firstName && `, ${firstName}`}
           </h1>
         </div>
-        <Button asChild variant="secondary" size="icon" className="rounded-full" aria-label="Perfil y configuración">
+        <Button asChild size="icon" className="rounded-full dark:bg-secondary dark:text-secondary-foreground dark:shadow-none dark:hover:bg-secondary/80" aria-label="Perfil y configuración">
           <Link to={routes.perfil}>
-            <UserRound className="size-5" />
+            <Settings className="size-5" />
           </Link>
         </Button>
       </header>

@@ -58,8 +58,8 @@ function ChartTooltip({ active, payload, granularity }: TooltipContentProps<numb
 export function ConsistencyChart({ series, granularity }: { series: SeriesPoint[]; granularity: Granularity }) {
   const [asTable, setAsTable] = useState(false)
   const line = useCssVar('--chart-line', '#5670ff')
-  const grid = useCssVar('--chart-grid', '#e8ebf5')
-  const muted = useCssVar('--muted-foreground', '#646a80')
+  const grid = useCssVar('--chart-grid', '#ecedf1')
+  const muted = useCssVar('--muted-foreground', '#686d7c')
   const surface = useCssVar('--card', '#ffffff')
 
   const compact = granularity === 'dia' && series.length <= 7

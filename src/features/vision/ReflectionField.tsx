@@ -55,7 +55,7 @@ export function ReflectionField({ question, placeholder, initialValue, onSave }:
   }, [value])
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+    <div className="rounded-2xl border border-card-border bg-card p-4 shadow-soft">
       <label htmlFor={id} className="block text-[15px] leading-snug font-semibold">
         {question}
       </label>
