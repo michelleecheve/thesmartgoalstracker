@@ -109,9 +109,25 @@ describe('racha actual', () => {
     expect(currentStreak([s], done(['a', '2026-11-01'], ['a', '2026-11-04']), '2026-11-04', '2026-11-01')).toBe(2)
   })
 
-  it('exige todos los hábitos del día', () => {
-    const c = done(['a', '2026-11-03'], ['b', '2026-11-03'], ['a', '2026-11-02'])
-    expect(currentStreak([stat('a'), stat('b')], c, '2026-11-03', '2026-11-01')).toBe(1)
+  it('un día con al menos el 50 % de los hábitos completados no la rompe', () => {
+    // 2 de 4 el día 2 (50 %) y 4 de 4 el día 3.
+    const four = [stat('a'), stat('b'), stat('c'), stat('d')]
+    const c = done(['a', '2026-11-02'], ['b', '2026-11-02'], ['a', '2026-11-03'], ['b', '2026-11-03'], ['c', '2026-11-03'], ['d', '2026-11-03'])
+    expect(currentStreak(four, c, '2026-11-03', '2026-11-01')).toBe(2)
+  })
+
+  it('menos del 50 % la rompe', () => {
+    // 1 de 3 el día 2 (33 %).
+    const three = [stat('a'), stat('b'), stat('c')]
+    const c = done(['a', '2026-11-02'], ['a', '2026-11-03'], ['b', '2026-11-03'], ['c', '2026-11-03'])
+    expect(currentStreak(three, c, '2026-11-03', '2026-11-01')).toBe(1)
+  })
+
+  it('un día congelado no la rompe ni suma', () => {
+    // El día 3 no se hizo nada, pero se congeló.
+    const c = done(['a', '2026-11-02'], ['a', '2026-11-04'])
+    expect(currentStreak([stat('a')], c, '2026-11-04', '2026-11-01', new Set(['2026-11-03']))).toBe(2)
+    expect(currentStreak([stat('a')], c, '2026-11-04', '2026-11-01')).toBe(1)
   })
 
   it('sin datos es cero', () => {

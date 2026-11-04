@@ -96,15 +96,6 @@ export async function saveImageOrder(ordered: VisionBoardImageRow[]): Promise<vo
   if (failed?.error) throw toAppError(failed.error)
 }
 
-/** Mueve un elemento de la lista una posición (−1 antes, +1 después). */
-export function moveItem<T>(list: T[], index: number, delta: -1 | 1): T[] {
-  const target = index + delta
-  if (target < 0 || target >= list.length) return list
-  const next = [...list]
-  ;[next[index], next[target]] = [next[target]!, next[index]!]
-  return next
-}
-
 /** Elimina el registro y luego el archivo. */
 export async function deleteVisionImage(image: VisionBoardImageRow): Promise<void> {
   const { error } = await supabase.from('vision_board_images').delete().eq('id', image.id)

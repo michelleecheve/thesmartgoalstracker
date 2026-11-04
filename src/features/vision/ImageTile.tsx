@@ -10,7 +10,19 @@ function ratioStyle(width: number | null, height: number | null) {
   return { aspectRatio: width && height ? `${width} / ${height}` : '1 / 1' }
 }
 
-export function ImageTile({ image, goal, onOpen }: { image: VisionImage; goal: GoalRow | undefined; onOpen: () => void }) {
+export function ImageTile({
+  image,
+  goal,
+  onOpen,
+  showGoal = true,
+  showCaption = true,
+}: {
+  image: VisionImage
+  goal: GoalRow | undefined
+  onOpen: () => void
+  showGoal?: boolean
+  showCaption?: boolean
+}) {
   const [failed, setFailed] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const label = image.caption || (goal ? `Imagen de la meta ${goal.name}` : 'Imagen del tablero de visión')
@@ -40,13 +52,13 @@ export function ImageTile({ image, goal, onOpen }: { image: VisionImage; goal: G
           <ImageOff className="size-5" /> No se pudo cargar
         </span>
       )}
-      {goal && (
+      {goal && showGoal && (
         <span className="absolute top-2 left-2 inline-flex max-w-[85%] items-center gap-1.5 rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
           <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: accentVar(goal.color) }} />
           <span className="truncate">{goal.name}</span>
         </span>
       )}
-      {image.caption && (
+      {image.caption && showCaption && (
         <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 pt-8 pb-2.5 text-left text-xs leading-snug font-medium text-white">
           {image.caption}
         </span>

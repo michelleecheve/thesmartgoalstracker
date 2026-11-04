@@ -32,6 +32,8 @@ export type VisionQuestionKey = 'persona' | 'importancia' | 'vida' | 'motivacion
 export type ProfileRow = {
   id: string
   display_name: string | null
+  /** Frase de la tarjeta de Inicio; nula = frase por defecto. */
+  motivation_phrase: string | null
   created_at: Timestamp
   updated_at: Timestamp
 }
@@ -54,6 +56,8 @@ export type GoalRow = {
   metric_unit: string | null
   metric_target: number | null
   metric_current: number
+  /** Orden manual en Inicio; nulo si nunca se reordenó. */
+  sort_order: number | null
   completed_at: Timestamp | null
   archived_at: Timestamp | null
   created_at: Timestamp
@@ -87,6 +91,8 @@ export type HabitRow = {
   icon: string | null
   color: string | null
   status: HabitStatus
+  /** Orden manual dentro de su meta; nulo si nunca se reordenó. */
+  sort_order: number | null
   archived_at: Timestamp | null
   created_at: Timestamp
   updated_at: Timestamp
@@ -101,6 +107,13 @@ export type HabitScheduleVersionRow = {
   /** Días ISO: 1 = lunes … 7 = domingo. */
   weekdays: number[] | null
   interval_days: number | null
+  created_at: Timestamp
+}
+
+export type StreakFreezeRow = {
+  id: string
+  user_id: string
+  date: DateString
   created_at: Timestamp
 }
 
@@ -140,7 +153,7 @@ type Auto = 'id' | 'user_id' | 'created_at'
 export type Database = {
   public: {
     Tables: {
-      profiles: Table<ProfileRow, WithDefaults<ProfileRow, 'created_at' | 'updated_at' | 'display_name'>>
+      profiles: Table<ProfileRow, WithDefaults<ProfileRow, 'created_at' | 'updated_at' | 'display_name' | 'motivation_phrase'>>
       goals: Table<
         GoalRow,
         WithDefaults<
@@ -159,6 +172,7 @@ export type Database = {
           | 'metric_unit'
           | 'metric_target'
           | 'metric_current'
+          | 'sort_order'
           | 'completed_at'
           | 'archived_at'
         >
@@ -177,6 +191,7 @@ export type Database = {
           | 'icon'
           | 'color'
           | 'status'
+          | 'sort_order'
           | 'archived_at'
         >
       >
@@ -185,6 +200,7 @@ export type Database = {
         WithDefaults<HabitScheduleVersionRow, Auto | 'weekdays' | 'interval_days'>
       >
       habit_pauses: Table<HabitPauseRow, WithDefaults<HabitPauseRow, Auto | 'end_date'>>
+      streak_freezes: Table<StreakFreezeRow, WithDefaults<StreakFreezeRow, Auto>>
       habit_completions: Table<HabitCompletionRow, WithDefaults<HabitCompletionRow, Auto | 'completed_at'>>
       vision_board_entries: Table<
         VisionBoardEntryRow,

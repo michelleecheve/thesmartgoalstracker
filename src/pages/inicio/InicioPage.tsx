@@ -8,13 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProgressRing } from '@/components/common/ProgressRing'
 import { EmptyState } from '@/components/common/EmptyState'
 import { QueryError } from '@/components/common/QueryError'
-import { buildDayAgenda } from '@/domain/agenda'
+import { bySortOrder, buildDayAgenda, mergeOrder } from '@/domain/agenda'
 import { DayView, MonthView, WeekView, type AgendaViewProps } from '@/features/agenda/views'
-import { useAgendaContext, useMonthCompletions, useTodayCompletions, useToggleCompletion } from '@/features/agenda/hooks'
+import { useAgendaContext, useFreezes, useMonthCompletions, useTodayCompletions, useToggleCompletion, useToggleFreeze } from '@/features/agenda/hooks'
 import { useGoalBundle } from '@/features/goals/queries'
+import { useReorderGoals } from '@/features/goals/reorder'
 import { formatLongDate, isValidLocalDate, todayLocal, type LocalDate } from '@/lib/dates'
 import { greetingFor } from '@/lib/greeting'
-import { motivationFor } from '@/lib/motivation'
+import { DEFAULT_MOTIVATION } from '@/lib/motivation'
 import { routes } from '@/app/routes'
 import { useAuth } from '@/app/auth/auth-context'
 
@@ -50,6 +51,9 @@ export function InicioPage() {
   const month = useMonthCompletions(selected)
   const week = useTodayCompletions(today)
   const toggle = useToggleCompletion()
+  const reorderGoals = useReorderGoals()
+  const freezes = useFreezes()
+  const toggleFreeze = useToggleFreeze()
 
   const todayAgenda = useMemo(() => (ctx ? buildDayAgenda(ctx, today, week.set, today) : null), [ctx, today, week.set])
   const hasGoals = (bundle.data?.goals.length ?? 0) > 0
@@ -62,6 +66,13 @@ export function InicioPage() {
         completions: month.set,
         onSelect: (fecha) => update({ fecha }),
         onToggle: (habitId, date, completed) => toggle.mutate({ habitId, date, completed }),
+        // Las metas que hoy no se ven conservan su lugar en la lista completa.
+        freeze: {
+          frozen: freezes.set.has(today),
+          onToggle: (frozen) => toggleFreeze.mutate({ date: today, frozen }),
+        },
+        onReorderGoals: (visibleIds) =>
+          reorderGoals.mutate(mergeOrder(bySortOrder(ctx.goals).map((g) => g.id), visibleIds)),
       }
     : null
 
@@ -87,7 +98,7 @@ export function InicioPage() {
         completed={todayAgenda?.completed ?? 0}
         total={todayAgenda?.total ?? 0}
         loading={!todayAgenda || week.isPending}
-        message={motivationFor(now)}
+        message={profile?.motivation_phrase || DEFAULT_MOTIVATION}
       />
 
       {bundle.isError ? (

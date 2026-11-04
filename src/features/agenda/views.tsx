@@ -26,7 +26,7 @@ import {
   type LocalDate,
 } from '@/lib/dates'
 import { cn } from '@/lib/utils'
-import { DayAgendaList } from './DayAgendaList'
+import { DayAgendaList, type FreezeControl } from './DayAgendaList'
 import { DayMark, describeIndicator } from './DayMark'
 
 export interface AgendaViewProps {
@@ -36,6 +36,9 @@ export interface AgendaViewProps {
   completions: ReadonlySet<string>
   onSelect: (date: LocalDate) => void
   onToggle: (habitId: string, date: LocalDate, completed: boolean) => void
+  onReorderGoals: (orderedGoalIds: string[]) => void
+  /** Congelar la racha de hoy. */
+  freeze?: FreezeControl
 }
 
 // --- Piezas compartidas ---------------------------------------------------------
@@ -63,7 +66,7 @@ function NavHeader({ label, onPrev, onNext, prevLabel, nextLabel }: {
 }
 
 /** Hábitos del día elegido, con su título y porcentaje. */
-function SelectedDay({ ctx, selected, today, completions, onToggle, showSummary }: AgendaViewProps & { showSummary: boolean }) {
+function SelectedDay({ ctx, selected, today, completions, onToggle, onReorderGoals, freeze, showSummary }: AgendaViewProps & { showSummary: boolean }) {
   const agenda = buildDayAgenda(ctx, selected, completions, today)
   return (
     <div className="flex flex-col gap-3">
@@ -84,6 +87,8 @@ function SelectedDay({ ctx, selected, today, completions, onToggle, showSummary 
         agenda={agenda}
         extraCandidates={extraCandidates(ctx, selected, completions, today)}
         onToggle={(habitId, completed) => onToggle(habitId, selected, completed)}
+        onReorderGoals={onReorderGoals}
+        freeze={selected === today ? freeze : undefined}
       />
     </div>
   )

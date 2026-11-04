@@ -10,10 +10,12 @@ interface PageHeaderProps {
   /** Muestra un botón para regresar. Si es una cadena, navega a esa ruta. */
   back?: boolean | string
   action?: ReactNode
+  /** Elemento a la izquierda del título (p. ej. una ilustración). */
+  leading?: ReactNode
   className?: string
 }
 
-export function PageHeader({ title, subtitle, back, action, className }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, back, action, leading, className }: PageHeaderProps) {
   const navigate = useNavigate()
 
   return (
@@ -35,7 +37,8 @@ export function PageHeader({ title, subtitle, back, action, className }: PageHea
         </Button>
       )}
       <div className="flex items-end justify-between gap-3">
-        <div className="min-w-0">
+        {leading && <div className="shrink-0">{leading}</div>}
+        <div className="min-w-0 flex-1">
           <h1 className="truncate text-[28px] font-bold tracking-tight">{title}</h1>
           {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
         </div>

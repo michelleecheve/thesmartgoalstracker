@@ -26,10 +26,12 @@ import { ActionSheet, type ActionSheetItem } from '@/components/ui/action-sheet'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ProgressRing } from '@/components/common/ProgressRing'
+import { SortableList } from '@/components/common/SortableList'
 import { SectionTitle } from '@/components/common/SectionTitle'
 import { GoalStatusBadge } from '@/components/common/StatusBadge'
 import { QueryError } from '@/components/common/QueryError'
 import { HabitListItem } from '@/features/habits/HabitListItem'
+import { useReorderHabits } from '@/features/goals/reorder'
 import { UpdateMetricDialog } from '@/features/goals/UpdateMetricDialog'
 import { buildGoalSummary } from '@/features/goals/model'
 import { useAllCompletions, useGoalBundle, useRefreshGoals } from '@/features/goals/queries'
@@ -58,6 +60,7 @@ export function MetaDetallePage() {
   const refresh = useRefreshGoals()
   const bundle = useGoalBundle()
   const completions = useAllCompletions(bundle.data)
+  const reorderHabits = useReorderHabits()
   const today = todayLocal()
 
   const [goalSheet, setGoalSheet] = useState(false)
@@ -311,19 +314,21 @@ export function MetaDetallePage() {
               </CardContent>
             </Card>
           ) : (
-            <ul className="flex flex-col gap-2">
-              {summary.habits.map((h) => (
-                <li key={h.id}>
-                  <HabitListItem
-                    habit={h}
-                    version={habitInfo.get(h.id)?.version ?? null}
-                    consistency={habitInfo.get(h.id)?.consistency ?? { scheduled: 0, completed: 0, rate: null }}
-                    today={today}
-                    onOpenActions={() => setHabitSheet(h)}
-                  />
-                </li>
-              ))}
-            </ul>
+            <SortableList
+              className="flex flex-col gap-2"
+              items={summary.habits}
+              onReorder={(ids) => reorderHabits.mutate(ids)}
+              renderItem={(h, handle) => (
+                <HabitListItem
+                  habit={h}
+                  version={habitInfo.get(h.id)?.version ?? null}
+                  consistency={habitInfo.get(h.id)?.consistency ?? { scheduled: 0, completed: 0, rate: null }}
+                  today={today}
+                  onOpenActions={() => setHabitSheet(h)}
+                  dragHandle={summary.habits.length > 1 ? handle : undefined}
+                />
+              )}
+            />
           )}
 
           {summary.archivedHabits.length > 0 && (

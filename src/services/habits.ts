@@ -84,3 +84,12 @@ export async function deleteHabit(id: string): Promise<void> {
   const { error } = await supabase.from('habits').delete().eq('id', id)
   if (error) throw toAppError(error)
 }
+
+/** Guarda el orden manual de los hábitos (el primero de la lista queda con 1). */
+export async function saveHabitOrder(orderedIds: string[]): Promise<void> {
+  const results = await Promise.all(
+    orderedIds.map((id, i) => supabase.from('habits').update({ sort_order: i + 1 }).eq('id', id)),
+  )
+  const failed = results.find((r) => r.error)
+  if (failed?.error) throw toAppError(failed.error)
+}

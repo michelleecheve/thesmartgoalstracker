@@ -15,7 +15,7 @@ function renderList(agenda: DayAgenda, candidates: ExtraItem[]) {
   const onToggle = vi.fn()
   render(
     <MemoryRouter>
-      <DayAgendaList agenda={agenda} extraCandidates={candidates} onToggle={onToggle} />
+      <DayAgendaList agenda={agenda} extraCandidates={candidates} onToggle={onToggle} onReorderGoals={vi.fn()} />
     </MemoryRouter>,
   )
   return { onToggle, user: userEvent.setup() }

@@ -143,23 +143,30 @@ function dayTotals(stats: HabitForStats[], completions: ReadonlySet<string>, dat
   return { total, done }
 }
 
+/** Proporción mínima de hábitos completados para que un día cuente en la racha. */
+export const STREAK_MIN_RATIO = 0.5
+
 /**
- * Racha actual: días seguidos en los que completaste TODOS los hábitos programados.
+ * Racha actual: días seguidos en los que completaste al menos la mitad (50 %) de
+ * los hábitos programados.
  *  - Los días sin hábitos programados (o en pausa) no rompen ni suman.
- *  - Hoy suma si ya completaste todo; si aún no, no rompe la racha.
+ *  - Hoy suma si ya llegaste al 50 %; si aún no, no rompe la racha.
+ *  - Los días congelados (día excepcional) no la rompen ni suman.
  */
 export function currentStreak(
   stats: HabitForStats[],
   completions: ReadonlySet<string>,
   today: LocalDate,
   earliest: LocalDate | null,
+  frozen: ReadonlySet<LocalDate> = new Set(),
 ): number {
   if (!earliest) return 0
   let streak = 0
   for (let d = today; d >= earliest; d = addDaysLocal(d, -1)) {
+    if (frozen.has(d)) continue
     const { total, done } = dayTotals(stats, completions, d)
     if (total === 0) continue
-    if (done === total) streak++
+    if (done / total >= STREAK_MIN_RATIO) streak++
     else if (d === today) continue
     else break
   }

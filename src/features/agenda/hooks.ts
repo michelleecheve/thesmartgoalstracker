@@ -5,6 +5,7 @@ import { endOfWeekLocal, monthGridDays, startOfWeekLocal, type LocalDate } from 
 import { toHabitsForStats, type GoalBundleData } from '@/domain/mappers'
 import { completionKey } from '@/domain/progress'
 import type { AgendaContext } from '@/domain/agenda'
+import { fetchFreezes, freezeDay, unfreezeDay } from '@/services/freezes'
 import { fetchCompletions, markCompleted, unmarkCompleted, type CompletionRef } from '@/services/completions'
 import { toSpanishMessage } from '@/services/errors'
 import { queryKeys } from '@/features/goals/queries'
@@ -77,5 +78,25 @@ export function useToggleCompletion() {
     },
 
     onSettled: () => client.invalidateQueries({ queryKey: queryKeys.allCompletions }),
+  })
+}
+
+const freezesKey = ['streak-freezes'] as const
+
+/** Días con la racha congelada, como conjunto de fechas. */
+export function useFreezes() {
+  const query = useQuery({ queryKey: freezesKey, queryFn: fetchFreezes })
+  const set = useMemo(() => new Set<LocalDate>(query.data ?? []), [query.data])
+  return { ...query, set }
+}
+
+/** Congela o descongela la racha de un día. */
+export function useToggleFreeze() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: ({ date, frozen }: { date: LocalDate; frozen: boolean }) =>
+      frozen ? freezeDay(date) : unfreezeDay(date),
+    onError: (error) => toast.error(toSpanishMessage(error)),
+    onSettled: () => client.invalidateQueries({ queryKey: freezesKey }),
   })
 }

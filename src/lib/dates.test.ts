@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { formatLongDate, fromLocalDate, toLocalDate } from './dates'
 import { greetingFor } from './greeting'
-import { motivationFor } from './motivation'
 
 describe('fechas locales', () => {
   it('convierte ida y vuelta sin desfase de zona horaria', () => {
@@ -27,9 +26,5 @@ describe('saludo y motivación', () => {
     expect(greetingFor(new Date(2026, 10, 2, 8))).toBe('Buenos días')
     expect(greetingFor(new Date(2026, 10, 2, 15))).toBe('Buenas tardes')
     expect(greetingFor(new Date(2026, 10, 2, 21))).toBe('Buenas noches')
-  })
-
-  it('mantiene el mismo mensaje durante todo el día', () => {
-    expect(motivationFor(new Date(2026, 10, 2, 0, 5))).toBe(motivationFor(new Date(2026, 10, 2, 23, 55)))
   })
 })

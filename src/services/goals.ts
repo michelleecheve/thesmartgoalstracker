@@ -60,3 +60,12 @@ export async function deleteGoal(id: string): Promise<void> {
   const { error } = await supabase.from('goals').delete().eq('id', id)
   if (error) throw toAppError(error)
 }
+
+/** Guarda el orden manual de las metas (la primera de la lista queda con 1). */
+export async function saveGoalOrder(orderedIds: string[]): Promise<void> {
+  const results = await Promise.all(
+    orderedIds.map((id, i) => supabase.from('goals').update({ sort_order: i + 1 }).eq('id', id)),
+  )
+  const failed = results.find((r) => r.error)
+  if (failed?.error) throw toAppError(failed.error)
+}

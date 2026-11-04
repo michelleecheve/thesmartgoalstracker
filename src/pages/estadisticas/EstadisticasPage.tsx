@@ -14,6 +14,7 @@ import { SectionTitle } from '@/components/common/SectionTitle'
 import { FormField } from '@/components/forms/FormField'
 import { ConsistencyChart } from '@/features/stats/ConsistencyChart'
 import { earliestDate, useAllCompletions, useGoalBundle } from '@/features/goals/queries'
+import { useFreezes } from '@/features/agenda/hooks'
 import { toHabitsForStats } from '@/domain/mappers'
 import { accentVar } from '@/domain/labels'
 import { consistency, deadlineLabel, formatPercent, metricProgress } from '@/domain/progress'
@@ -85,6 +86,7 @@ export function EstadisticasPage() {
 
   const bundle = useGoalBundle()
   const completions = useAllCompletions(bundle.data)
+  const freezes = useFreezes()
 
   const data = useMemo(() => {
     const b = bundle.data
@@ -115,13 +117,13 @@ export function EstadisticasPage() {
       granularity,
       series,
       ranking,
-      streak: currentStreak(stats, completions.set, today, earliestDate(b)),
+      streak: currentStreak(stats, completions.set, today, earliestDate(b), freezes.set),
       activeGoals: activeGoals.length,
       activeHabits: activeHabits.length,
       goalRows,
       deadlines: upcomingDeadlines(b.goals, today),
     }
-  }, [bundle.data, completions.set, period.from, period.to, today, elapsed?.to])
+  }, [bundle.data, completions.set, freezes.set, period.from, period.to, today, elapsed?.to])
 
   const loading = bundle.isPending || (Boolean(bundle.data?.goals.length) && completions.isPending)
   const hasGoals = (bundle.data?.goals.length ?? 0) > 0
@@ -211,7 +213,7 @@ export function EstadisticasPage() {
               <StatTile icon={Repeat} label="Hábitos activos" value={String(data.activeHabits)} />
             </div>
             <p className="-mt-3 text-xs text-muted-foreground">
-              La racha cuenta los días seguidos en que completaste todos tus hábitos programados.
+              La racha cuenta los días seguidos en que completaste al menos la mitad de tus hábitos programados. Los días congelados no la rompen.
             </p>
 
             {/* Hábitos con mayor y menor constancia */}

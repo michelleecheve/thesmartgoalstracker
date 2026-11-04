@@ -50,7 +50,33 @@ export interface DayAgenda {
   isFuture: boolean
 }
 
+/** Orden manual primero; lo que nunca se movió va al final, en su orden original. */
+export function bySortOrder<T extends { sort_order: number | null }>(items: readonly T[]): T[] {
+  return [...items].sort((a, b) => {
+    if (a.sort_order === b.sort_order) return 0
+    if (a.sort_order === null) return 1
+    if (b.sort_order === null) return -1
+    return a.sort_order - b.sort_order
+  })
+}
+
+/**
+ * Coloca los ids reordenados en los mismos lugares que ocupaban dentro de la
+ * lista completa, para no desacomodar los elementos que no se ven.
+ */
+export function mergeOrder(allIds: string[], reorderedVisible: string[]): string[] {
+  const visible = new Set(reorderedVisible)
+  const queue = [...reorderedVisible]
+  return allIds.map((id) => (visible.has(id) ? queue.shift()! : id))
+}
+
 function byTimeThenName(a: HabitRow, b: HabitRow): number {
+  // El orden manual (arrastrar) va primero; los demás, por hora y nombre.
+  if (a.sort_order !== b.sort_order) {
+    if (a.sort_order === null) return 1
+    if (b.sort_order === null) return -1
+    return a.sort_order - b.sort_order
+  }
   if (a.time_of_day !== b.time_of_day) {
     if (!a.time_of_day) return 1
     if (!b.time_of_day) return -1
@@ -69,7 +95,7 @@ export function buildDayAgenda(
   const statsById = new Map(ctx.stats.map((s) => [s.id, s]))
   const groups: AgendaGroup[] = []
 
-  for (const goal of ctx.goals) {
+  for (const goal of bySortOrder(ctx.goals)) {
     const items: AgendaItem[] = ctx.habits
       .filter((h) => h.goal_id === goal.id)
       .filter((h) => {

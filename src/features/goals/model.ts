@@ -1,4 +1,5 @@
 import type { LocalDate } from '@/lib/dates'
+import { bySortOrder } from '@/domain/agenda'
 import { toHabitsForStats, type GoalBundleData } from '@/domain/mappers'
 import { consistency, daysRemaining, metricProgress, type Consistency } from '@/domain/progress'
 import type { GoalRow, GoalStatus, HabitRow } from '@/types/database'
@@ -21,7 +22,7 @@ export function buildGoalSummary(
   completions: ReadonlySet<string>,
   today: LocalDate,
 ): GoalSummary {
-  const goalHabits = bundle.habits.filter((h) => h.goal_id === goal.id)
+  const goalHabits = bySortOrder(bundle.habits.filter((h) => h.goal_id === goal.id))
   const stats = toHabitsForStats(bundle, (h) => h.goal_id === goal.id)
   const from = goalHabits.reduce((min, h) => (h.start_date < min ? h.start_date : min), goal.start_date)
 

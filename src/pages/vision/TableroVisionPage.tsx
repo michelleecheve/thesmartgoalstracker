@@ -1,17 +1,21 @@
 import { useMemo, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { ImagePlus, Images } from 'lucide-react'
+import { Check, ArrowUpDown, ImagePlus, Images, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { EmptyState } from '@/components/common/EmptyState'
 import { QueryError } from '@/components/common/QueryError'
-import { SectionTitle } from '@/components/common/SectionTitle'
+import { Separator } from '@/components/ui/separator'
 import { ReflectionField } from '@/features/vision/ReflectionField'
 import { ImageTile, PendingTile } from '@/features/vision/ImageTile'
+import { DisplaySettingsDialog } from '@/features/vision/DisplaySettingsDialog'
+import { useBoardDisplay } from '@/features/vision/displayPrefs'
+import { OrderGrid } from '@/features/vision/OrderGrid'
 import { ImageDetailDialog } from '@/features/vision/ImageDetailDialog'
 import { visionQuestions } from '@/features/vision/questions'
 import { aspectRatio, distributeColumns } from '@/features/vision/masonry'
@@ -21,7 +25,6 @@ import { useCurrentUser } from '@/app/auth/auth-context'
 import { processImageFile } from '@/lib/images'
 import {
   deleteVisionImage,
-  moveItem,
   saveImageOrder,
   saveReflection,
   updateVisionImage,
@@ -48,6 +51,9 @@ export function TableroVisionPage() {
   const [pending, setPending] = useState<Pending[]>([])
   const [openId, setOpenId] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [ordering, setOrdering] = useState(false)
+  const [display, updateDisplay] = useBoardDisplay()
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const list = useMemo(() => images.data ?? [], [images.data])
   const openIndex = list.findIndex((i) => i.id === openId)
@@ -104,9 +110,7 @@ export function TableroVisionPage() {
     }
   }
 
-  async function handleMove(delta: -1 | 1) {
-    if (openIndex < 0) return
-    const reordered = moveItem(list, openIndex, delta)
+  async function handleReorder(reordered: typeof list) {
     // Actualización inmediata en pantalla; si falla, se recarga el orden real.
     client.setQueryData(visionKeys.images, reordered.map((img, position) => ({ ...img, position })))
     try {
@@ -114,7 +118,6 @@ export function TableroVisionPage() {
     } catch (error) {
       toast.error(toSpanishMessage(error))
       await refreshImages()
-      throw error
     }
   }
 
@@ -138,8 +141,12 @@ export function TableroVisionPage() {
       <PageContent className="gap-7">
         {/* Reflexión escrita */}
         <section className="flex flex-col gap-3">
-          <SectionTitle>Reflexión</SectionTitle>
-          <p className="-mt-1 text-sm text-muted-foreground">Escribe con calma. Tus respuestas se guardan automáticamente.</p>
+          <Card className="surface-hero">
+            <CardContent className="flex items-center gap-4">
+              <h2 className="text-xl font-bold tracking-tight">Reflexión</h2>
+              <p className="flex-1 text-xs text-muted-foreground">Escribe con calma. Tus respuestas se guardan automáticamente.</p>
+            </CardContent>
+          </Card>
           {reflections.isPending ? (
             [0, 1].map((i) => <Skeleton key={i} className="h-40 rounded-2xl" />)
           ) : reflections.isError ? (
@@ -157,19 +164,40 @@ export function TableroVisionPage() {
           )}
         </section>
 
+        <Separator />
+
         {/* Tablero visual */}
         <section className="flex flex-col gap-3">
-          <SectionTitle
-            action={
-              list.length > 0 && (
-                <Button variant="ghost" size="sm" className="-mr-2 min-h-11 text-primary" onClick={() => fileInput.current?.click()}>
+          <Card className="surface-hero-blue">
+            <CardContent className="flex items-center gap-4">
+              <h2 className="text-xl font-bold tracking-tight">Tablero visual</h2>
+              {list.length > 0 && (
+                <p className="flex-1 text-xs text-muted-foreground">
+                  {ordering
+                    ? 'Mantén presionada una imagen y arrástrala a su nuevo lugar.'
+                    : 'Toca una imagen para verla, editar su descripción o asociarla a una meta.'}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+
+          {list.length > 0 && (
+            <div className="flex items-center justify-center">
+              <Button variant="ghost" size="sm" className="min-h-11 text-primary" aria-label="Configurar la vista del tablero" onClick={() => setSettingsOpen(true)}>
+                <Settings className="size-4" /> Config
+              </Button>
+              {list.length > 1 && (
+                <Button variant="ghost" size="sm" className="min-h-11 text-primary" onClick={() => setOrdering((v) => !v)}>
+                  {ordering ? <Check className="size-4" /> : <ArrowUpDown className="size-4" />} {ordering ? 'Listo' : 'Ordenar'}
+                </Button>
+              )}
+              {!ordering && (
+                <Button variant="ghost" size="sm" className="min-h-11 text-primary" onClick={() => fileInput.current?.click()}>
                   <ImagePlus className="size-4" /> Agregar
                 </Button>
-              )
-            }
-          >
-            Tablero visual
-          </SectionTitle>
+              )}
+            </div>
+          )}
 
           <input
             ref={fileInput}
@@ -201,12 +229,14 @@ export function TableroVisionPage() {
                 }
               />
             </div>
+          ) : ordering ? (
+            <OrderGrid images={list} onReorder={handleReorder} />
           ) : (
             <div className="grid grid-cols-2 items-start gap-2">
               {columns.map((column, c) => (
                 <div key={c} className="flex flex-col gap-2">
                   {column.map(({ item }) => (
-                    <ImageTile key={item.id} image={item} goal={item.goal_id ? goalsById.get(item.goal_id) : undefined} onOpen={() => setOpenId(item.id)} />
+                    <ImageTile key={item.id} image={item} goal={item.goal_id ? goalsById.get(item.goal_id) : undefined} onOpen={() => setOpenId(item.id)} showGoal={display.showGoal} showCaption={display.showCaption} />
                   ))}
                   {/* Las imágenes en subida aparecen al final de la columna más corta */}
                   {c === (columns[0]!.length <= columns[1]!.length ? 0 : 1) &&
@@ -215,22 +245,21 @@ export function TableroVisionPage() {
               ))}
             </div>
           )}
-          {list.length > 0 && (
-            <p className="text-xs text-muted-foreground">Toca una imagen para agregar una descripción, asociarla a una meta o cambiar su orden.</p>
-          )}
         </section>
       </PageContent>
 
       <ImageDetailDialog
         image={confirmDelete ? null : openImage}
         goals={goals}
-        canMoveBefore={openIndex > 0}
-        canMoveAfter={openIndex >= 0 && openIndex < list.length - 1}
+        position={openIndex + 1}
+        total={list.length}
+        onPrev={openIndex > 0 ? () => setOpenId(list[openIndex - 1]!.id) : null}
+        onNext={openIndex >= 0 && openIndex < list.length - 1 ? () => setOpenId(list[openIndex + 1]!.id) : null}
         onClose={() => setOpenId(null)}
         onSave={handleSaveImage}
-        onMove={handleMove}
         onDelete={() => setConfirmDelete(true)}
       />
+      <DisplaySettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} display={display} onChange={updateDisplay} />
       <ConfirmDialog
         open={confirmDelete}
         onOpenChange={(open) => !open && setConfirmDelete(false)}

@@ -22,9 +22,9 @@ export function getThemePreference(): ThemePreference {
     const value = localStorage.getItem(THEME_STORAGE_KEY)
     if (value === 'claro' || value === 'oscuro' || value === 'sistema') return value
   } catch {
-    // Almacenamiento no disponible (p. ej. navegación privada): se usa el claro.
+    // Almacenamiento no disponible (p. ej. navegación privada): se sigue al sistema.
   }
-  return 'claro'
+  return 'sistema'
 }
 
 export function resolveTheme(preference: ThemePreference): ResolvedTheme {

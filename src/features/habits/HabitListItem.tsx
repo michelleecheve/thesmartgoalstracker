@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { ChevronRight, Clock, MoreHorizontal } from 'lucide-react'
 import { routes } from '@/app/routes'
@@ -15,6 +16,8 @@ interface HabitListItemProps {
   consistency: Consistency
   today: LocalDate
   onOpenActions: () => void
+  /** Asa para arrastrar y reordenar (solo en hábitos activos). */
+  dragHandle?: ReactNode
 }
 
 function dateRangeLabel(habit: HabitRow, today: LocalDate): string {
@@ -24,7 +27,7 @@ function dateRangeLabel(habit: HabitRow, today: LocalDate): string {
   return `Desde el ${formatShortDate(habit.start_date)}`
 }
 
-export function HabitListItem({ habit, version, consistency, today, onOpenActions }: HabitListItemProps) {
+export function HabitListItem({ habit, version, consistency, today, onOpenActions, dragHandle }: HabitListItemProps) {
   const details = [
     habit.time_of_day ? habit.time_of_day.slice(0, 5) : null,
     habit.duration_minutes ? `${habit.duration_minutes} min` : null,
@@ -73,6 +76,7 @@ export function HabitListItem({ habit, version, consistency, today, onOpenAction
       >
         <MoreHorizontal className="size-5" />
       </button>
+      {dragHandle && <span className="mt-2 mr-1">{dragHandle}</span>}
     </div>
   )
 }

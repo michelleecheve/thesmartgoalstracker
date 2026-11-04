@@ -18,3 +18,15 @@ export async function updateDisplayName(userId: string, displayName: string): Pr
   if (error) throw toAppError(error)
   return data
 }
+
+/** Guarda la frase de Inicio; vacía = volver a la frase por defecto. */
+export async function updateMotivationPhrase(userId: string, phrase: string): Promise<ProfileRow> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ motivation_phrase: phrase.trim() || null })
+    .eq('id', userId)
+    .select('*')
+    .single()
+  if (error) throw toAppError(error)
+  return data
+}

@@ -1,7 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fitWithin, randomId, validateImageFile } from '@/lib/images'
-import { moveItem } from '@/services/vision'
 import { AppError, toSpanishMessage } from '@/services/errors'
 import { aspectRatio, distributeColumns } from './masonry'
 import { useAutosave } from './hooks'
@@ -63,12 +62,6 @@ describe('collage', () => {
     expect(aspectRatio(1000, 100)).toBe(0.45)
     expect(aspectRatio(100, 1000)).toBe(2.2)
     expect(aspectRatio(null, null)).toBe(1)
-  })
-
-  it('mueve imágenes antes o después', () => {
-    expect(moveItem(['a', 'b', 'c'], 1, -1)).toEqual(['b', 'a', 'c'])
-    expect(moveItem(['a', 'b', 'c'], 1, 1)).toEqual(['a', 'c', 'b'])
-    expect(moveItem(['a', 'b', 'c'], 0, -1)).toEqual(['a', 'b', 'c'])
   })
 })
 

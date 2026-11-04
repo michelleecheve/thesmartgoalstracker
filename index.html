@@ -21,7 +21,8 @@
       (function () {
         try {
           var t = localStorage.getItem('tema')
-          var dark = t === 'oscuro' || (t === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          var follow = t !== 'claro' && t !== 'oscuro' // sin elección guardada: sigue al sistema
+          var dark = t === 'oscuro' || (follow && window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (dark) {
             document.documentElement.classList.add('dark')
             document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1c1a17')

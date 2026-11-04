@@ -24,10 +24,13 @@ afterEach(() => vi.unstubAllGlobals())
 const themeColor = () => document.querySelector('meta[name="theme-color"]')!.getAttribute('content')
 
 describe('tema de la interfaz', () => {
-  it('por defecto es claro', () => {
-    expect(getThemePreference()).toBe('claro')
+  it('por defecto sigue al sistema', () => {
+    expect(getThemePreference()).toBe('sistema')
     expect(applyTheme()).toBe('claro')
     expect(document.documentElement).not.toHaveClass('dark')
+    systemDark = true
+    expect(applyTheme()).toBe('oscuro')
+    expect(document.documentElement).toHaveClass('dark')
   })
 
   it('el modo oscuro agrega la clase y cambia el color de la barra del sistema', () => {
@@ -49,11 +52,14 @@ describe('tema de la interfaz', () => {
 
   it('ignora valores guardados inválidos', () => {
     localStorage.setItem(THEME_STORAGE_KEY, 'morado')
-    expect(getThemePreference()).toBe('claro')
+    expect(getThemePreference()).toBe('sistema')
   })
 
   it('el hook se actualiza al elegir un tema y al cambiar el sistema en vivo', () => {
     const { result } = renderHook(() => useTheme())
+    expect(result.current).toMatchObject({ preference: 'sistema', resolved: 'claro' })
+
+    act(() => result.current.setPreference('claro'))
     expect(result.current).toMatchObject({ preference: 'claro', resolved: 'claro' })
 
     act(() => result.current.setPreference('sistema'))

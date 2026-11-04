@@ -40,22 +40,30 @@ function StatusLabel({ status, onRetry }: { status: SaveStatus; onRetry: () => v
   }
 }
 
+/** Líneas visibles antes de que el campo deje de crecer y se desplace. */
+const MAX_LINES = 10
+
 export function ReflectionField({ question, placeholder, initialValue, onSave }: ReflectionFieldProps) {
   const id = useId()
   const [value, setValue] = useState(initialValue)
   const { status, flush } = useAutosave(value, onSave, initialValue)
   const ref = useRef<HTMLTextAreaElement>(null)
 
-  // El campo crece con el texto.
+  // El campo crece con el texto hasta MAX_LINES líneas; después aparece una barra de desplazamiento.
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
+    const style = getComputedStyle(el)
+    const lineHeight = parseFloat(style.lineHeight) || 24
+    const chrome = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+    const max = lineHeight * MAX_LINES + chrome
     el.style.height = 'auto'
-    el.style.height = `${Math.max(el.scrollHeight, 96)}px`
+    el.style.height = `${Math.min(Math.max(el.scrollHeight, 96), max)}px`
+    el.style.overflowY = el.scrollHeight > max ? 'auto' : 'hidden'
   }, [value])
 
   return (
-    <div className="rounded-2xl border border-card-border bg-card p-4 shadow-soft">
+    <div>
       <label htmlFor={id} className="block text-[15px] leading-snug font-semibold">
         {question}
       </label>
@@ -67,9 +75,9 @@ export function ReflectionField({ question, placeholder, initialValue, onSave }:
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
         onBlur={() => void flush()}
-        className="mt-3 resize-none overflow-hidden border-transparent bg-muted/50 shadow-none focus-visible:bg-card"
+        className="mt-2 resize-none border-card-border bg-card shadow-soft"
       />
-      <p className="mt-2 flex min-h-5 justify-end text-xs text-muted-foreground" aria-live="polite">
+      <p className="mt-1 flex min-h-5 justify-end text-xs text-muted-foreground" aria-live="polite">
         <StatusLabel status={status} onRetry={() => void flush()} />
       </p>
     </div>

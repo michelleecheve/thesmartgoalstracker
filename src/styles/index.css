@@ -156,6 +156,17 @@
   --achievement: var(--hero-achievement);
 }
 
+/* Variante azul de la superficie destacada (encabezado del tablero de visión). */
+.surface-hero-blue {
+  --card: var(--brand-blue);
+  --card-foreground: #fff;
+  --foreground: #fff;
+  --muted-foreground: rgb(255 255 255 / 0.8);
+  --border: transparent;
+  --card-border: transparent;
+  --primary: #fff;
+}
+
 @theme inline {
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto,
