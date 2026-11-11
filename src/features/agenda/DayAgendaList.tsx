@@ -12,9 +12,11 @@ import { accentVar } from '@/domain/labels'
 import { routes } from '@/app/routes'
 import { HabitCheckItem } from './HabitCheckItem'
 
-/** Congelar la racha del día (solo se ofrece para hoy). */
+/** Congelar la racha del día (hoy o un día que ya pasó). */
 export interface FreezeControl {
   frozen: boolean
+  /** Cómo nombrar el día en los textos: «hoy» o «el 3 de noviembre». */
+  dayLabel: string
   onToggle: (frozen: boolean) => void
 }
 
@@ -125,16 +127,16 @@ export function DayAgendaList({ agenda, extraCandidates, onToggle, onReorderGoal
         (freeze.frozen ? (
           <div className="flex flex-col items-center gap-1 rounded-2xl border border-dashed border-primary/40 bg-primary/5 px-4 py-3 text-center">
             <p className="flex items-center gap-2 text-sm font-semibold text-primary dark:text-foreground">
-              <Snowflake className="size-4" /> Racha congelada hoy
+              <Snowflake className="size-4" /> Racha congelada {freeze.dayLabel}
             </p>
-            <p className="text-xs text-muted-foreground">Hoy no suma ni rompe tu racha.</p>
+            <p className="text-xs text-muted-foreground">Este día no suma ni rompe tu racha.</p>
             <Button variant="ghost" size="sm" className="min-h-11 text-primary dark:text-muted-foreground" onClick={() => freeze.onToggle(false)}>
               Descongelar
             </Button>
           </div>
         ) : (
           <Button variant="ghost" className="self-center text-primary dark:text-muted-foreground" onClick={() => setFreezeOpen(true)}>
-            <Snowflake className="size-4" /> Congelar racha el día de hoy
+            <Snowflake className="size-4" /> Congelar racha {freeze.dayLabel}
           </Button>
         ))}
 
@@ -142,8 +144,8 @@ export function DayAgendaList({ agenda, extraCandidates, onToggle, onReorderGoal
         <ConfirmDialog
           open={freezeOpen}
           onOpenChange={setFreezeOpen}
-          title="¿Congelar tu racha hoy?"
-          description="Úsalo cuando hoy fue un día fuera de lo normal y no pudiste hacer tus hábitos. Así no pierdes tu racha por un caso excepcional. ¡Úsala de forma consciente!"
+          title={`¿Congelar tu racha ${freeze.dayLabel}?`}
+          description="Úsalo cuando fue un día fuera de lo normal y no pudiste hacer tus hábitos. Así no pierdes tu racha por un caso excepcional. ¡Úsala de forma consciente!"
           confirmLabel="Congelar racha"
           onConfirm={() => freeze.onToggle(true)}
         />

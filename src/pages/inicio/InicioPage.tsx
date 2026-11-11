@@ -68,8 +68,8 @@ export function InicioPage() {
         onToggle: (habitId, date, completed) => toggle.mutate({ habitId, date, completed }),
         // Las metas que hoy no se ven conservan su lugar en la lista completa.
         freeze: {
-          frozen: freezes.set.has(today),
-          onToggle: (frozen) => toggleFreeze.mutate({ date: today, frozen }),
+          isFrozen: (date) => freezes.set.has(date),
+          onToggle: (date, frozen) => toggleFreeze.mutate({ date, frozen }),
         },
         onReorderGoals: (visibleIds) =>
           reorderGoals.mutate(mergeOrder(bySortOrder(ctx.goals).map((g) => g.id), visibleIds)),

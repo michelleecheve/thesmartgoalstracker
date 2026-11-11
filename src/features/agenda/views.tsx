@@ -26,7 +26,7 @@ import {
   type LocalDate,
 } from '@/lib/dates'
 import { cn } from '@/lib/utils'
-import { DayAgendaList, type FreezeControl } from './DayAgendaList'
+import { DayAgendaList } from './DayAgendaList'
 import { DayMark, describeIndicator } from './DayMark'
 
 export interface AgendaViewProps {
@@ -37,8 +37,8 @@ export interface AgendaViewProps {
   onSelect: (date: LocalDate) => void
   onToggle: (habitId: string, date: LocalDate, completed: boolean) => void
   onReorderGoals: (orderedGoalIds: string[]) => void
-  /** Congelar la racha de hoy. */
-  freeze?: FreezeControl
+  /** Congelar la racha de hoy o de un día que ya pasó. */
+  freeze?: { isFrozen: (date: LocalDate) => boolean; onToggle: (date: LocalDate, frozen: boolean) => void }
 }
 
 // --- Piezas compartidas ---------------------------------------------------------
@@ -88,7 +88,15 @@ function SelectedDay({ ctx, selected, today, completions, onToggle, onReorderGoa
         extraCandidates={extraCandidates(ctx, selected, completions, today)}
         onToggle={(habitId, completed) => onToggle(habitId, selected, completed)}
         onReorderGoals={onReorderGoals}
-        freeze={selected === today ? freeze : undefined}
+        freeze={
+          freeze && selected <= today
+            ? {
+                frozen: freeze.isFrozen(selected),
+                dayLabel: selected === today ? 'hoy' : `el ${formatEs(selected, "d 'de' MMMM")}`,
+                onToggle: (frozen) => freeze.onToggle(selected, frozen),
+              }
+            : undefined
+        }
       />
     </div>
   )
