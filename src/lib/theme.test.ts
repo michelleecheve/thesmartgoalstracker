@@ -24,10 +24,16 @@ afterEach(() => vi.unstubAllGlobals())
 const themeColor = () => document.querySelector('meta[name="theme-color"]')!.getAttribute('content')
 
 describe('tema de la interfaz', () => {
-  it('por defecto sigue al sistema', () => {
-    expect(getThemePreference()).toBe('sistema')
+  it('por defecto usa el modo claro, aunque el sistema esté en oscuro', () => {
+    systemDark = true
+    expect(getThemePreference()).toBe('claro')
     expect(applyTheme()).toBe('claro')
     expect(document.documentElement).not.toHaveClass('dark')
+  })
+
+  it('con "Sistema" aplica el tema del dispositivo', () => {
+    localStorage.setItem(THEME_STORAGE_KEY, 'sistema')
+    expect(applyTheme()).toBe('claro')
     systemDark = true
     expect(applyTheme()).toBe('oscuro')
     expect(document.documentElement).toHaveClass('dark')
@@ -52,12 +58,12 @@ describe('tema de la interfaz', () => {
 
   it('ignora valores guardados inválidos', () => {
     localStorage.setItem(THEME_STORAGE_KEY, 'morado')
-    expect(getThemePreference()).toBe('sistema')
+    expect(getThemePreference()).toBe('claro')
   })
 
   it('el hook se actualiza al elegir un tema y al cambiar el sistema en vivo', () => {
     const { result } = renderHook(() => useTheme())
-    expect(result.current).toMatchObject({ preference: 'sistema', resolved: 'claro' })
+    expect(result.current).toMatchObject({ preference: 'claro', resolved: 'claro' })
 
     act(() => result.current.setPreference('claro'))
     expect(result.current).toMatchObject({ preference: 'claro', resolved: 'claro' })

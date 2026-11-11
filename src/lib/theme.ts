@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from 'react'
+import { syncNativeTheme } from './nativeTheme'
 
 /**
  * Tema de la interfaz: claro, oscuro o el del sistema.
  * Es una preferencia visual de cada dispositivo, por eso se guarda localmente
  * (no en Supabase): así se aplica al instante, antes de dibujar la pantalla.
  * Un script en index.html repite esta lógica para evitar el destello inicial.
+ * Sin elección guardada se usa el modo claro.
  */
 export type ThemePreference = 'claro' | 'oscuro' | 'sistema'
 export type ResolvedTheme = 'claro' | 'oscuro'
@@ -22,9 +24,9 @@ export function getThemePreference(): ThemePreference {
     const value = localStorage.getItem(THEME_STORAGE_KEY)
     if (value === 'claro' || value === 'oscuro' || value === 'sistema') return value
   } catch {
-    // Almacenamiento no disponible (p. ej. navegación privada): se sigue al sistema.
+    // Almacenamiento no disponible (p. ej. navegación privada): modo claro.
   }
-  return 'sistema'
+  return 'claro'
 }
 
 export function resolveTheme(preference: ThemePreference): ResolvedTheme {
@@ -37,6 +39,7 @@ export function applyTheme(preference: ThemePreference = getThemePreference()): 
   const resolved = resolveTheme(preference)
   document.documentElement.classList.toggle('dark', resolved === 'oscuro')
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', BACKGROUND[resolved])
+  syncNativeTheme(preference)
   return resolved
 }
 

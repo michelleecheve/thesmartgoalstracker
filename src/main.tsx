@@ -9,6 +9,7 @@ import { AuthProvider } from '@/app/auth/AuthProvider'
 import { ConfiguracionPendiente } from '@/pages/ConfiguracionPendiente'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { applyTheme, useTheme } from '@/lib/theme'
+import { hideNativeSplash } from '@/lib/nativeTheme'
 import '@/styles/index.css'
 
 applyTheme()
@@ -39,3 +40,6 @@ createRoot(document.getElementById('root')!).render(
     )}
   </StrictMode>,
 )
+
+// Dos cuadros después, la primera pantalla ya está pintada: se retira la capa nativa de arranque.
+requestAnimationFrame(() => requestAnimationFrame(hideNativeSplash))

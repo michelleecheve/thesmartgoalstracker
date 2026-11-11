@@ -16,12 +16,20 @@
 
     <title>Smart Habits</title>
 
+    <style>
+      html { background: #f7f7f9; }
+      html.dark { background: #1c1a17; }
+      .boot { display: flex; min-height: 100dvh; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+      .boot img { height: 128px; width: auto; margin-bottom: 8px; }
+      .boot div { height: 56px; }
+    </style>
+
     <!-- Aplica el tema guardado antes de dibujar la página (evita un destello). Ver src/lib/theme.ts -->
     <script>
       (function () {
         try {
           var t = localStorage.getItem('tema')
-          var follow = t !== 'claro' && t !== 'oscuro' // sin elección guardada: sigue al sistema
+          var follow = t === 'sistema' // sin elección guardada: modo claro
           var dark = t === 'oscuro' || (follow && window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (dark) {
             document.documentElement.classList.add('dark')
@@ -32,7 +40,8 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Pantalla de arranque: misma posición que LoadingScreen y que el LaunchScreen nativo, para que no parpadee. -->
+    <div id="root"><div class="boot"><img src="/icons/logo.png" alt="" /><div></div></div></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
