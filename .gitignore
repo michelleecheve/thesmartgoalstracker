@@ -10,3 +10,17 @@ coverage
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# Capacitor
+ios/App/build
+ios/App/Pods
+ios/App/App/public
+ios/App/App/capacitor.config.json
+ios/DerivedData
+ios/App/xcuserdata
+android/.gradle
+android/build
+android/app/build
+android/app/src/main/assets/public
+android/capacitor-cordova-android-plugins
+android/local.properties
