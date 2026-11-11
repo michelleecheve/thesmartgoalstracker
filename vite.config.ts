@@ -17,8 +17,8 @@ export default defineConfig({
         injectRegister: 'auto',
         includeAssets: ['icons/icon-192.png', 'icons/apple-touch-icon.png'],
         manifest: {
-          name: 'Metas SMART',
-          short_name: 'Metas',
+          name: 'Smart Habits',
+          short_name: 'Smart Habits',
           description: 'Convierte tus metas SMART en hábitos pequeños, medibles y constantes.',
           lang: 'es',
           dir: 'ltr',
